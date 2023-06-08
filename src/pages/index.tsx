@@ -42,7 +42,7 @@ const Home = () => {
         setWin({ black, white });
       }
     }
-  }, [board]);
+  }, [board, win.black]);
 
   //直前のターンでパスしたか
   const [isPassFront, setIsPassFront] = useState(false);
@@ -81,6 +81,7 @@ const Home = () => {
       setIsPassFront(true);
       setTurnColor(3 - turnColor);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [board]);
 
   const onClick = (x: number, y: number) => {
