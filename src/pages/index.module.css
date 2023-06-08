@@ -115,3 +115,26 @@
   height: 1em;
   margin-left: 0.5rem;
 }
+
+.board {
+  width: 640px;
+  height: 640px;
+  background-color: green;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.cell {
+  width: 80px;
+  height: 80px;
+  border: 1px solid black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.stone {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+}
