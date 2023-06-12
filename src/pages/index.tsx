@@ -88,6 +88,29 @@ const Home = () => {
     turnFunc(x, y, false);
   };
 
+  //ひっくり返りを検知したあと置く場所を知らせる黄色いマスを設置
+  useEffect(() => {
+    const nowBoard: number[][] = JSON.parse(JSON.stringify(board));
+
+    const newBoard = nowBoard.map((y, i) => {
+      return y.map((x, j) => {
+        return turnFunc(j, i, true) ? 3 : x === 3 ? 0 : x;
+      });
+    });
+
+    setBoard(newBoard);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [board]);
+
+  /**
+   * オセロをひっくりかえす \
+   * 次におくことができる位置の表示やひっくり返す処理、パス判定に使う関数
+   *
+   * @param x オセロのx座標
+   * @param y オセロのy座標
+   * @param vertification オセロがひっくり返せる時ひっくり返す処理を行うか(falseのときひっくり返す)
+   * @returns その盤面はオセロをひっくり返すことができるか
+   */
   const turnFunc = (x: number, y: number, vertification: boolean) => {
     let isTurnAble = false;
 
@@ -109,10 +132,10 @@ const Home = () => {
     for (const oneDir of directions) {
       //そもそも置けるか
       if (
-        board[y][x] === 0 &&
+        (board[y][x] === 0 || board[y][x] === 3) &&
         board[y + oneDir[1]] !== undefined &&
         board[y + oneDir[1]][x + oneDir[0]] !== undefined &&
-        board[y + oneDir[1]][x + oneDir[0]] !== 0 &&
+        (board[y + oneDir[1]][x + oneDir[0]] !== 0 || board[y + oneDir[1]][x + oneDir[0]] !== 3) &&
         board[y + oneDir[1]][x + oneDir[0]] !== turnColor
       ) {
         //ここからひっくり返すコード
@@ -123,7 +146,8 @@ const Home = () => {
             if (
               board[y + oneDirOther[1] * i] === undefined || //y方向のあふれ
               board[y + oneDirOther[1] * i][x + oneDirOther[0] * i] === undefined || //x方向のあふれ
-              board[y + oneDirOther[1] * i][x + oneDirOther[0] * i] === 0 || //0だった場合
+              board[y + oneDirOther[1] * i][x + oneDirOther[0] * i] === 0 || //0か3だった場合
+              board[y + oneDirOther[1] * i][x + oneDirOther[0] * i] === 3 ||
               (i === 1 && board[y + oneDirOther[1] * i][x + oneDirOther[0] * i] === turnColor)
             )
               break;
@@ -185,7 +209,7 @@ const Home = () => {
               {color !== 0 && (
                 <div
                   className={styles.stone}
-                  style={{ background: color === 1 ? '#000' : '#fff' }}
+                  style={{ background: color === 3 ? '#ffdc00' : color === 1 ? '#000' : '#fff' }}
                 />
               )}
             </div>
