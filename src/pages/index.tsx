@@ -26,7 +26,7 @@ const Home = () => {
 
       for (const y of board) {
         for (const x of y) {
-          if (x === 0) {
+          if (x === 0 || x === 3) {
             isZero = true;
             break;
           }
